@@ -23,7 +23,7 @@ namespace ArticlesApp
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ArticlesContext>(opt => opt.UseSqlServer(connection));            
+            services.AddDbContext<ArticlesContext>(opt => opt.UseSqlServer(connection).UseLazyLoadingProxies());            
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>

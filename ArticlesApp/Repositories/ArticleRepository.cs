@@ -2,6 +2,8 @@
 using System.Linq;
 using ArticlesApp.Interfaces;
 using ArticlesApp.Model;
+using ArticlesApp.ViewModels;
+using ArticlesApp.ViewModels.QueryObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArticlesApp.Repositories
@@ -13,39 +15,28 @@ namespace ArticlesApp.Repositories
         {
         }
 
-        public Article GetArticleWithReviews(int id)
+        public Article GetArticleWithReviewes(int id)
         {
             return ArticlesContext.Articles.Include(p => p.Reviews).FirstOrDefault(p => p.Id == id);
         }
 
-        public IEnumerable<Article>GetTopArticles()
+        public IEnumerable<ArticleViewModel>GetArticlesViewModels()
         {
-            // добавить построение рейтинга
-            return ArticlesContext.Articles.ToList();
+            return ArticlesContext.Articles.MapToViewModel();
         }
 
-        public double AverangeRating(int id)
+        public ArticleViewModel GetArticleViewModel(int id)
         {
-            var article = this.GetArticleWithReviews(id);
-            if (article == null || article.Reviews.Count==0)
-            {
-                return 0;
-            }
-
-            double sum = 0;
-            foreach(Review review in article.Reviews)
-            {
-                sum += review.NumStars;
-            }
-            return sum / article.Reviews.Count();
+            var article = this.Get(id);
+            return article.MapToViewModel();
         }
-
+                
         public ArticlesContext ArticlesContext
         {
             get
             {
                 return context as ArticlesContext;
             }
-        }
+        }        
     }
 }

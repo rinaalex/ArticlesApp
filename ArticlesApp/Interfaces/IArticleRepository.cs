@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using ArticlesApp.Model;
+using ArticlesApp.ViewModels;
 
 namespace ArticlesApp.Interfaces
 {
     public interface IArticleRepository: IRepository<Article>
     {
-        Article GetArticleWithReviews(int id);
-        IEnumerable<Article> GetTopArticles();
-        double AverangeRating(int id);
+        Article GetArticleWithReviewes(int id);
+        IEnumerable<ArticleViewModel> GetArticlesViewModels();
+        ArticleViewModel GetArticleViewModel(int id);
     }
 }
