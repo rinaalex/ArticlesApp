@@ -24,8 +24,8 @@ namespace ArticlesAppXamarin.Views
             bool result = await App.ArticleManager.LoginAsync((LoginModel)this.BindingContext);
             if(result)
             {
-                await Navigation.PopAsync();
-                await Navigation.PushAsync(new MainPage());
+                BindingContext = new LoginModel();
+                await Navigation.PushAsync(new ArticlesListPage());
             }
             else
             {
