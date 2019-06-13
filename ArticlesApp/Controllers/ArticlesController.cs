@@ -6,7 +6,7 @@ using ArticlesApp.Repositories;
 
 namespace ArticlesApp.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ArticlesController : ControllerBase
