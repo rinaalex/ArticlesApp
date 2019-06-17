@@ -6,7 +6,7 @@ namespace ArticlesAppXamarin.Data
 {
     public interface IRestService
     {
-        Task<List<ArticleViewModel>> RefreshDataAsync();
+        Task<List<ArticleModel>> RefreshDataAsync();
         Task<bool> AuthorizeAsync(LoginModel loginModel);
     }
 }

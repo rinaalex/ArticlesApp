@@ -2,7 +2,7 @@
 
 namespace ArticlesAppXamarin.Models
 {
-    public class ArticleViewModel
+    public class ArticleModel
     {
         public int Id { get; set; }
         public string Title { get; set; }

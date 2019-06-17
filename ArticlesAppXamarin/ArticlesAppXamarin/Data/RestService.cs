@@ -14,16 +14,16 @@ namespace ArticlesAppXamarin.Data
     {
         HttpClient _client;
 
-        public List<ArticleViewModel> Articles { get; private set; }
+        public List<ArticleModel> Articles { get; private set; }
 
         public RestService()
         {
             _client = new HttpClient();
         }
 
-        public async Task<List<ArticleViewModel>> RefreshDataAsync()
+        public async Task<List<ArticleModel>> RefreshDataAsync()
         {
-            Articles = new List<ArticleViewModel>();
+            Articles = new List<ArticleModel>();
 
             var uri = new Uri(string.Format(Constants.ArticleItemsUrl, string.Empty));
 
@@ -33,7 +33,7 @@ namespace ArticlesAppXamarin.Data
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    Articles = JsonConvert.DeserializeObject<List<ArticleViewModel>>(content);
+                    Articles = JsonConvert.DeserializeObject<List<ArticleModel>>(content);
                 }
             }
             catch(Exception ex)

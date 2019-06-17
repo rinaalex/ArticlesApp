@@ -19,6 +19,7 @@ namespace ArticlesApp.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Get()
         {
             return Ok(unitOfWork.Articles.GetArticlesViewModels());

@@ -14,7 +14,7 @@ namespace ArticlesAppXamarin.Data
             this.restService = restService;
         }
 
-        public Task<List<ArticleViewModel>>GetTasksAsync()
+        public Task<List<ArticleModel>>GetTasksAsync()
         {
             return restService.RefreshDataAsync();
         }
