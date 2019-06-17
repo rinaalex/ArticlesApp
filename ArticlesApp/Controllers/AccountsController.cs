@@ -31,18 +31,25 @@ namespace ArticlesApp.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
-            if(ModelState.IsValid)
-            {
+            var result = new AuthResult();
+
+            if (ModelState.IsValid)
+            {             
                 var user = unitOfWork.Authors.
                     Find(p => p.Login == model.Login && p.Password == model.Password).FirstOrDefault();
-                if(user!=null)
+
+                if (user!=null)
                 {
                     await Authentificate(user.Login);
-                    return Ok(); //здесь можно отправить данные авторизованного пользователя
+                    result.IsAuthentificated = true;
+                    result.Login = user.Login;
+                    return Ok(result); 
                 }
-                ModelState.AddModelError("", "Неверный логин и/или пароль.");
+
+                result.IsAuthentificated = false;
+                //ModelState.AddModelError("", "Неверный логин и/или пароль.");
             }
-            return BadRequest(ModelState);
+            return BadRequest(result);
         }
 
         [HttpPost]
