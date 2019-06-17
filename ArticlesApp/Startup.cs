@@ -28,7 +28,7 @@ namespace ArticlesApp
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/api/Account/Login");
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/api/Accounts/Login");
                 });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
