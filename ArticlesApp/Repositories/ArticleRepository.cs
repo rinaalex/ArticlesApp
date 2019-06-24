@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using ArticlesApp.Interfaces;
 using ArticlesApp.Model;
 using ArticlesApp.ViewModels;
 using ArticlesApp.ViewModels.QueryObjects;
-using Microsoft.EntityFrameworkCore;
 
 namespace ArticlesApp.Repositories
 {
@@ -22,12 +22,14 @@ namespace ArticlesApp.Repositories
 
         public IEnumerable<ArticleViewModel>GetArticlesViewModels()
         {
-            return ArticlesContext.Articles.MapToViewModel();
+            return ArticlesContext.Articles.Include(p=>p.Author).Include(p=>p.Reviews).MapToViewModel();
         }
 
         public ArticleViewModel GetArticleViewModel(int id)
         {
             var article = this.Get(id);
+            ArticlesContext.Entry(article).Reference(a => a.Author).Load();
+            ArticlesContext.Entry(article).Collection(a => a.Reviews).Load();
             return article.MapToViewModel();
         }
                 

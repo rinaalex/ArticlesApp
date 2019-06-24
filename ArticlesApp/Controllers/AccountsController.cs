@@ -4,19 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Newtonsoft.Json;
 using ArticlesApp.Model;
 using ArticlesApp.ViewModels;
 using ArticlesApp.Repositories;
-
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using Newtonsoft.Json;
-using System.Security.Claims;
 
 namespace ArticlesApp.Controllers
 {
@@ -37,35 +31,34 @@ namespace ArticlesApp.Controllers
         {
             var result = new AuthResult();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var identity = GetIdentity(model.Login, model.Password);
-
-                if (identity == null)
-                {
-                    result.IsAuthentificated = false;
-                    return BadRequest("Неверный логин и/или парль!");
-                }
-
-                // Создание токена
-                var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.ISSUER,
-                    audience: AuthOptions.AUDIENCE,
-                    notBefore: DateTime.UtcNow,
-                    claims: identity.Claims,
-                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
-                    );
-
-                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-                result.IsAuthentificated = true;
-                result.Login = model.Login;
-                result.Token = encodedJwt;
-
-                return Ok(result); // сериализация?
+                return BadRequest(ModelState);
             }
-            return BadRequest(result);
+
+            var identity = GetIdentity(model.Login, model.Password);
+            if (identity == null)
+            {
+                return BadRequest("Неверный логин и/или пароль!");
+            }
+
+            // Создание токена
+            var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.ISSUER,
+                audience: AuthOptions.AUDIENCE,
+                notBefore: DateTime.UtcNow,
+                claims: identity.Claims,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+                );
+
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            result.IsAuthentificated = true;
+            result.Login = model.Login;
+            result.Token = encodedJwt;
+
+            return Ok(result); // сериализация?
         }
 
         [HttpPost]
@@ -101,15 +94,20 @@ namespace ArticlesApp.Controllers
             var user = unitOfWork.Authors.
                     Find(p => p.Login == login && p.Password == password).FirstOrDefault();
 
-            var claims = new List<Claim>
+            if (user != null)
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
-            };
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
+                };
 
-            ClaimsIdentity identity = new ClaimsIdentity(claims, "Token", 
-                ClaimsIdentity.DefaultRoleClaimType, ClaimsIdentity.DefaultRoleClaimType);
+                ClaimsIdentity identity = new ClaimsIdentity(claims, "Token",
+                    ClaimsIdentity.DefaultRoleClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
-            return identity;            
+                return identity;
+            }
+            else
+                return null;
         }
     }
 }

@@ -3,13 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using ArticlesApp.Model;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using ArticlesApp.Model;
 
 namespace ArticlesApp
 {
@@ -26,7 +23,7 @@ namespace ArticlesApp
         public void ConfigureServices(IServiceCollection services)
         {
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ArticlesContext>(opt => opt.UseSqlServer(connection).UseLazyLoadingProxies());
+            services.AddDbContext<ArticlesContext>(opt => opt.UseSqlServer(connection));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

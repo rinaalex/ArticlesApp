@@ -9,8 +9,8 @@ namespace ArticlesApp.Model
         {
         }
 
-        public virtual DbSet<Author> Authors { get; set; }
-        public virtual DbSet<Article> Articles { get; set; }
-        public virtual DbSet<Review> Reviews { get; set; }
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }
