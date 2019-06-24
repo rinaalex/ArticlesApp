@@ -5,13 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using System.Security.Claims;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ArticlesApp.Model;
 using ArticlesApp.ViewModels;
 using ArticlesApp.Repositories;
+
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace ArticlesApp.Controllers
 {
@@ -27,27 +32,38 @@ namespace ArticlesApp.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        [Route("Login")]
+        [Route("Token")]
         public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             var result = new AuthResult();
 
             if (ModelState.IsValid)
-            {             
-                var user = unitOfWork.Authors.
-                    Find(p => p.Login == model.Login && p.Password == model.Password).FirstOrDefault();
+            {
+                var identity = GetIdentity(model.Login, model.Password);
 
-                if (user!=null)
+                if (identity == null)
                 {
-                    await Authentificate(user.Login);
-                    result.IsAuthentificated = true;
-                    result.Login = user.Login;
-                    return Ok(result); 
+                    result.IsAuthentificated = false;
+                    return BadRequest("Неверный логин и/или парль!");
                 }
 
-                result.IsAuthentificated = false;
-                //ModelState.AddModelError("", "Неверный логин и/или пароль.");
+                // Создание токена
+                var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    notBefore: DateTime.UtcNow,
+                    claims: identity.Claims,
+                    expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+                    );
+
+                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+                result.IsAuthentificated = true;
+                result.Login = model.Login;
+                result.Token = encodedJwt;
+
+                return Ok(result); // сериализация?
             }
             return BadRequest(result);
         }
@@ -58,13 +74,14 @@ namespace ArticlesApp.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user = unitOfWork.Authors.Find(p => p.Login == model.Login).FirstOrDefault();
-                if (user == null)
+                var identity = GetIdentity(model.Login, model.Password);
+                
+                if (identity == null)
                 {
                     unitOfWork.Authors.Add(new Author { Login = model.Login, Password = model.Password });
-                    unitOfWork.Complete(); //await
-                    await Authentificate(model.Login);
-                    return Ok(); //redirection 
+                    unitOfWork.Complete(); //await?
+                    // авторизация?
+                    return Ok(); //redirection ?
                 }
                 else
                     ModelState.AddModelError("", "Выбранный вами логин уже занят!");
@@ -74,24 +91,25 @@ namespace ArticlesApp.Controllers
 
         [HttpGet]
         [Route("LogOut")]
-        [Authorize]
-        public async Task<IActionResult> LogOut()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        public IActionResult LogOut()
+        {           
             return NoContent();
         }
 
-        private async Task Authentificate(string userName)
+        private ClaimsIdentity GetIdentity(string login, string password)
         {
+            var user = unitOfWork.Authors.
+                    Find(p => p.Login == login && p.Password == password).FirstOrDefault();
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login)
             };
 
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", 
+            ClaimsIdentity identity = new ClaimsIdentity(claims, "Token", 
                 ClaimsIdentity.DefaultRoleClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            return identity;            
         }
     }
 }
