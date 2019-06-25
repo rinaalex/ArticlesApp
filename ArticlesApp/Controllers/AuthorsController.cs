@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ArticlesApp.Repositories;
 using ArticlesApp.Model;
+using ArticlesApp.ViewModels;
 
 namespace ArticlesApp.Controllers
 {
@@ -19,14 +22,24 @@ namespace ArticlesApp.Controllers
         [Authorize]
         public IActionResult GetAll()
         {
-            return Ok(unitOfWork.Authors.GetAuthorsViewModels());
+            IEnumerable<AuthorViewModel> authors = unitOfWork.Authors.GetAuthorsViewModels();
+            if(authors.Count()!=0)
+            {
+                return Ok(unitOfWork.Authors.GetAuthorsViewModels());
+            }
+            return NotFound();
         }
 
         [HttpGet("{id}")]
         [Authorize]
         public IActionResult Get(int id)
         {
-            return Ok(unitOfWork.Authors.GetAuthorViewModel(id));
+            var result = unitOfWork.Authors.GetAuthorViewModel(id);
+            if(result!=null)
+            {
+                return Ok();
+            }
+            return NotFound();
         }
     }
 }

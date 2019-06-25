@@ -18,9 +18,13 @@ namespace ArticlesApp.Repositories
         public AuthorViewModel GetAuthorViewModel(int id)
         {
             Author author = this.Get(id);
-            ArticlesContext.Entry(author).Collection(a => a.Articles).Load();
-            ArticlesContext.Entry(author).Collection(a => a.Articles).Query().Select(q => q.Reviews).Load();
-            return author.MapToViewModel();
+            if(author!=null)
+            {
+                ArticlesContext.Entry(author).Collection(a => a.Articles).Load();
+                ArticlesContext.Entry(author).Collection(a => a.Articles).Query().Select(q => q.Reviews).Load();
+                return author.MapToViewModel();
+            }
+            return null;
         }
 
         public IEnumerable<AuthorViewModel> GetAuthorsViewModels()
