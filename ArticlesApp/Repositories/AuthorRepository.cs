@@ -3,6 +3,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using ArticlesApp.Interfaces;
 using ArticlesApp.Model;
+using ArticlesApp.ViewModels;
+using ArticlesApp.ViewModels.QueryObjects;
 
 namespace ArticlesApp.Repositories
 {
@@ -13,17 +15,25 @@ namespace ArticlesApp.Repositories
         {            
         }
 
+        public AuthorViewModel GetAuthorViewModel(int id)
+        {
+            Author author = this.Get(id);
+            ArticlesContext.Entry(author).Collection(a => a.Articles).Load();
+            ArticlesContext.Entry(author).Collection(a => a.Articles).Query().Select(q => q.Reviews).Load();
+            return author.MapToViewModel();
+        }
+
+        public IEnumerable<AuthorViewModel> GetAuthorsViewModels()
+        {
+            return ArticlesContext.Authors.Include(p=>p.Articles).ThenInclude(q=>q.Reviews).MapToViewModel();
+        }
+
+        // добавить сортировку и фильтрацию
         public Author GetAuthorWithArticles(int id)
         {
             return ArticlesContext.Authors.Include(p => p.Articles).SingleOrDefault(p => p.Id == id);
         }
-
-        public IEnumerable<Author>GetTopAuthors()
-        {
-            // добавить формирование рейтинга
-            return ArticlesContext.Authors.ToList();
-        }
-
+                
         public ArticlesContext ArticlesContext
         {
             get

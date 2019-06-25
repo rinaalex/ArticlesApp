@@ -19,14 +19,14 @@ namespace ArticlesApp.Controllers
         [Authorize]
         public IActionResult GetAll()
         {
-            return Ok(unitOfWork.Authors.All());
+            return Ok(unitOfWork.Authors.GetAuthorsViewModels());
         }
 
         [HttpGet("{id}")]
         [Authorize]
         public IActionResult Get(int id)
         {
-            return Ok(unitOfWork.Authors.Get(id));
+            return Ok(unitOfWork.Authors.GetAuthorViewModel(id));
         }
     }
 }
