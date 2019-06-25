@@ -28,9 +28,13 @@ namespace ArticlesApp.Repositories
         public ArticleViewModel GetArticleViewModel(int id)
         {
             var article = this.Get(id);
-            ArticlesContext.Entry(article).Reference(a => a.Author).Load();
-            ArticlesContext.Entry(article).Collection(a => a.Reviews).Load();
-            return article.MapToViewModel();
+            if(article!=null)
+            {
+                ArticlesContext.Entry(article).Reference(a => a.Author).Load();
+                ArticlesContext.Entry(article).Collection(a => a.Reviews).Load();
+                return article.MapToViewModel();
+            }
+            return null;
         }
                 
         public ArticlesContext ArticlesContext
