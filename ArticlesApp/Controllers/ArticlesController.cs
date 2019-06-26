@@ -43,6 +43,17 @@ namespace ArticlesApp.Controllers
             return NotFound();
         }
 
+        [HttpGet("{id}/reviews")]
+        public IActionResult GetReviews(int id)
+        {
+            IEnumerable<ReviewViewModel> reviews = unitOfWork.Reviews.GetReviewsViewModels(id);
+            if (reviews.Count() != 0)
+            {
+                return Ok(reviews);
+            }
+            return NotFound();
+        }
+
         [HttpPost]
         public IActionResult Create(ArticleViewModel newAarticle)
         {
