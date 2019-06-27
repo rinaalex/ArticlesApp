@@ -38,5 +38,10 @@ namespace ArticlesApp.Repositories
                 return context as ArticlesContext;
             }
         }
+
+        //public override IEnumerable<Review> All()
+        //{
+        //    return ArticlesContext.Reviews.Include(a => a.Author);
+        //}
     }
 }
