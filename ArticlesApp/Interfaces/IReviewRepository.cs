@@ -8,5 +8,6 @@ namespace ArticlesApp.Interfaces
     {
         ReviewViewModel GetReviewViewModel(int id);
         IEnumerable<ReviewViewModel> GetReviewsViewModels(int articleId);
+        IEnumerable<ReviewViewModel> GetReviewsViewModelsByAuthor(int authorId);
     }
 }

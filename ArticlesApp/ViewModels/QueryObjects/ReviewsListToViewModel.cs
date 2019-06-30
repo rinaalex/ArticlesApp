@@ -16,6 +16,7 @@ namespace ArticlesApp.ViewModels.QueryObjects
             return new ReviewViewModel
             {
                 Id = review.Id,
+                ArticleName = review.Article.Title,
                 Content = review.Content,
                 NumStars = review.NumStars,
                 AuthorName = review.Author.Login,

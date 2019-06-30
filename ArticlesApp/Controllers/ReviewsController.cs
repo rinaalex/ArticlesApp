@@ -24,16 +24,16 @@ namespace ArticlesApp.Controllers
             unitOfWork = new UnitOfWork(context);
         }
 
-        //[HttpGet("/api/authors/{id}/reviews")]
-        //public IActionResult GetByAuthor(int id)
-        //{
-        //    IEnumerable<ReviewViewModel> reviews = unitOfWork.Reviews.Find(r => r.AuthorId == id).MaptoViewModel();
-        //    if (reviews.Count()!=0)
-        //    {
-        //        return Ok(reviews);
-        //    }
-        //    return NotFound();
-        //}
+        [HttpGet("/api/authors/{id}/reviews")]
+        public IActionResult GetByAuthor(int id)
+        {
+            IEnumerable<ReviewViewModel> reviews = unitOfWork.Reviews.GetReviewsViewModelsByAuthor(id);
+            if (reviews.Count() != 0)
+            {
+                return Ok(reviews);
+            }
+            return NotFound();
+        }
 
         [HttpGet("/api/articles/{id}/reviews")]
         public IActionResult Get(int id)

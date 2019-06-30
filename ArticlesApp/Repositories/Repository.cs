@@ -25,10 +25,24 @@ namespace ArticlesApp.Repositories
 
         public IEnumerable<TEntity> All()
         {
-            return _entities.ToList();
+            IQueryable<TEntity> query = _entities;
+            
+            return query.ToList();
         }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+        public IEnumerable<TEntity> All(string includeProperties="")
+        {
+            IQueryable<TEntity> query = _entities;
+            foreach (var includeProperty in includeProperties.Split
+                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                query.Include(includeProperty).Load();
+            }
+
+            return query.ToList();
+        }
+
+        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return _entities.Where(predicate);
         }

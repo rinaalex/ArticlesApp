@@ -6,6 +6,9 @@ using ArticlesApp.Model;
 using ArticlesApp.ViewModels;
 using ArticlesApp.ViewModels.QueryObjects;
 
+//using System.Linq.Expressions;
+//using System;
+
 namespace ArticlesApp.Repositories
 {
     public class ReviewRepository: Repository<Review>, IReviewRepository
@@ -14,6 +17,11 @@ namespace ArticlesApp.Repositories
             :base(context)
         { 
         }
+
+        //public override IEnumerable<Review> Find(Expression<Func<Review, bool>> predicate)
+        //{
+        //    return ArticlesContext.Reviews.Include(r=>r.Article).Include(r=>r.Author).Where(predicate);
+        //}
 
         public ReviewViewModel GetReviewViewModel(int id)
         {
@@ -28,8 +36,15 @@ namespace ArticlesApp.Repositories
 
         public IEnumerable<ReviewViewModel> GetReviewsViewModels(int articleId)
         {
-            return ArticlesContext.Reviews.Where(p=>p.ArticleId==articleId).Include(r => r.Author).MaptoViewModel();
+            return ArticlesContext.Reviews.Where(p=>p.ArticleId==articleId).Include(r => r.Author).Include(r=>r.Article).MaptoViewModel();
         }
+
+        public IEnumerable<ReviewViewModel> GetReviewsViewModelsByAuthor(int authorId)
+        {
+            return this.All(includeProperties:"Author,Article").MaptoViewModel();
+            //return ArticlesContext.Reviews.Where(p => p.AuthorId == authorId).Include(r => r.Author).Include(r => r.Article).MaptoViewModel();
+        }
+
 
         public ArticlesContext ArticlesContext
         {

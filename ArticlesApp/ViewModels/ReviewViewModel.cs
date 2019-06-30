@@ -6,6 +6,7 @@ namespace ArticlesApp.ViewModels
     public class ReviewViewModel
     {
         public int Id { get; set; }
+        public string ArticleName { get; set; }
         public string Content { get; set; }
         [Range(0, 5)]
         public byte NumStars { get; set; }
