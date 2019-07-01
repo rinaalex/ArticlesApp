@@ -62,7 +62,7 @@ namespace ArticlesApp.Controllers
                         Review review = new Review
                         {
                             ArticleId = id,
-                            AuthorId = int.Parse(HttpContext.User.Identity.Name),
+                            AuthorId = int.Parse(User.Identity.Name),
                             Content = newReview.Content,
                             NumStars = newReview.NumStars,
                             PublicationDate = DateTime.UtcNow
@@ -71,14 +71,14 @@ namespace ArticlesApp.Controllers
                         unitOfWork.Complete();
                         newReview = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == review.Id,
                             includeProperties: "Article,Author").FirstOrDefault().MapToViewModel();
-                        return Ok(newReview);
+                        return CreatedAtAction(nameof(Get), new { id = review.Id }, newReview);
                     }
                 }
-                ModelState.AddModelError("", "Невозможно добавить отзыв. Статья не существует.");
+                ModelState.AddModelError("error", "Невозможно добавить отзыв. Статья не существует.");
             }
             catch(Exception ex)
             {
-                ModelState.AddModelError("", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
+                ModelState.AddModelError("error", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
             }
             return BadRequest(ModelState);
         }
@@ -94,18 +94,23 @@ namespace ArticlesApp.Controllers
                                     includeProperties: "Article,Author").FirstOrDefault();
                     if (review != null)
                     {
-                        review.Content = updatedReview.Content;
-                        review.PublicationDate = DateTime.UtcNow;
-                        unitOfWork.ReviewsRepository.Update(review);
-                        unitOfWork.Complete();
-                        updatedReview = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == updatedReview.Id).FirstOrDefault().MapToViewModel();
-                        return Ok(updatedReview);
+                        if(review.AuthorId==int.Parse(User.Identity.Name))
+                        {
+                            review.Content = updatedReview.Content;
+                            review.PublicationDate = DateTime.UtcNow;
+                            unitOfWork.ReviewsRepository.Update(review);
+                            unitOfWork.Complete();
+                            updatedReview = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == updatedReview.Id).FirstOrDefault().MapToViewModel();
+                            return Ok(updatedReview);
+                        }
+                        ModelState.AddModelError("error", "Вы можете редактировать только свои отзывы.");
+                        return Conflict(ModelState);
                     }
                 }
             }
             catch(Exception ex)
             {
-                ModelState.AddModelError("", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
+                ModelState.AddModelError("error", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
             }            
             return BadRequest(ModelState);
         }
@@ -116,9 +121,14 @@ namespace ArticlesApp.Controllers
             Review review = unitOfWork.ReviewsRepository.GetById(id);
             if(review!=null)
             {
-                unitOfWork.ReviewsRepository.Delete(id);
-                unitOfWork.Complete();
-                return NoContent();
+                if (review.AuthorId == int.Parse(User.Identity.Name))
+                {
+                    unitOfWork.ReviewsRepository.Delete(id);
+                    unitOfWork.Complete();
+                    return NoContent();
+                }
+                ModelState.AddModelError("error", "Вы можете удалять только свои отзывы.");
+                return Conflict(ModelState);
             }
             return NotFound();
         }
