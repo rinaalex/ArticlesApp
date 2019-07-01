@@ -52,36 +52,62 @@ namespace ArticlesApp.Controllers
         [HttpPost("/api/articles/{id}/reviews")]
         public IActionResult CreateReview(int id, [FromBody]ReviewViewModel newReview)
         {
-            Review review = new Review
+            try
             {
-                ArticleId = id,
-                AuthorId = int.Parse(HttpContext.User.Identity.Name),
-                Content = newReview.Content,
-                NumStars = newReview.NumStars,
-                PublicationDate = DateTime.UtcNow
-            };
-            unitOfWork.ReviewsRepository.Add(review);
-            unitOfWork.Complete();
-            newReview = unitOfWork.ReviewsRepository.Get(filter: r=>r.Id==review.Id,
-                includeProperties:"Article,Author").FirstOrDefault().MapToViewModel();
-            return Ok(newReview);
+                if (ModelState.IsValid)
+                {
+                    Article article = unitOfWork.ArticlesRepository.GetById(id);
+                    if (article != null)
+                    {
+                        Review review = new Review
+                        {
+                            ArticleId = id,
+                            AuthorId = int.Parse(HttpContext.User.Identity.Name),
+                            Content = newReview.Content,
+                            NumStars = newReview.NumStars,
+                            PublicationDate = DateTime.UtcNow
+                        };
+                        unitOfWork.ReviewsRepository.Add(review);
+                        unitOfWork.Complete();
+                        newReview = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == review.Id,
+                            includeProperties: "Article,Author").FirstOrDefault().MapToViewModel();
+                        return Ok(newReview);
+                    }
+                }
+                ModelState.AddModelError("", "Невозможно добавить отзыв. Статья не существует.");
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
+            }
+            return BadRequest(ModelState);
         }
 
         [HttpPut]
         public IActionResult Update([FromBody]ReviewViewModel updatedReview)
         {
-            Review review = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == updatedReview.Id,
-                includeProperties:"Article,Author").FirstOrDefault();
-            if(review!=null)
+            try
             {
-                review.Content = updatedReview.Content;
-                review.PublicationDate = DateTime.UtcNow;
-                unitOfWork.ReviewsRepository.Update(review);
-                unitOfWork.Complete();
-                updatedReview = unitOfWork.ReviewsRepository.Get(filter: r=>r.Id==updatedReview.Id).FirstOrDefault().MapToViewModel();
-                return Ok(updatedReview);
+                if(ModelState.IsValid)
+                {
+                    Review review = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == updatedReview.Id,
+                                    includeProperties: "Article,Author").FirstOrDefault();
+                    if (review != null)
+                    {
+                        review.Content = updatedReview.Content;
+                        review.PublicationDate = DateTime.UtcNow;
+                        unitOfWork.ReviewsRepository.Update(review);
+                        unitOfWork.Complete();
+                        updatedReview = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == updatedReview.Id).FirstOrDefault().MapToViewModel();
+                        return Ok(updatedReview);
+                    }
+                }
             }
-            return NotFound();
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
+            }            
+            return BadRequest(ModelState);
         }
 
         [HttpDelete("{id}")]

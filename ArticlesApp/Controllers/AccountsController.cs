@@ -63,21 +63,29 @@ namespace ArticlesApp.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task <IActionResult> Register(LoginViewModel model)
+        public async Task <IActionResult> Register([FromBody] LoginViewModel model)
         {
             if(ModelState.IsValid)
             {
                 var identity = GetIdentity(model.Login, model.Password);
-                
-                if (identity == null)
+
+                try
                 {
-                    unitOfWork.AuthorsRepository.Add(new Author { Login = model.Login, Password = model.Password });
-                    unitOfWork.Complete(); //await?
-                    // авторизация?
-                    return Ok(); //redirection ?
+
+                    if (identity == null)
+                    {
+                        unitOfWork.AuthorsRepository.Add(new Author { Login = model.Login, Password = model.Password });
+                        unitOfWork.Complete(); //await?
+                                               // авторизация?
+                        return Ok(); //redirection ?
+                    }
+                    else
+                        ModelState.AddModelError("", "Выбранный вами логин уже занят!");
                 }
-                else
-                    ModelState.AddModelError("", "Выбранный вами логин уже занят!");
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
+                }
             }
             return BadRequest(ModelState);
         }
