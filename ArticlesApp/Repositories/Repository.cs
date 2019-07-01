@@ -18,33 +18,33 @@ namespace ArticlesApp.Repositories
             _entities = context.Set<TEntity>();
         }
 
-        public TEntity Get(int id)
+        public TEntity GetById(int id)
         {
             return _entities.Find(id);
         }
 
-        public IEnumerable<TEntity> All()
+        public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "")        
         {
             IQueryable<TEntity> query = _entities;
-            
-            return query.ToList();
-        }
 
-        public IEnumerable<TEntity> All(string includeProperties="")
-        {
-            IQueryable<TEntity> query = _entities;
+            if(filter!=null)
+            {
+                query = query.Where(filter);
+            }
+
             foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query.Include(includeProperty).Load();
             }
 
-            return query.ToList();
-        }
+            if(orderBy!=null)
+            {
+                return orderBy(query).ToList();
+            }
 
-        public virtual IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _entities.Where(predicate);
+            return query.ToList();
         }
 
         public void Add(TEntity entity)

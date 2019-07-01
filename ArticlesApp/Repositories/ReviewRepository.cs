@@ -23,27 +23,28 @@ namespace ArticlesApp.Repositories
         //    return ArticlesContext.Reviews.Include(r=>r.Article).Include(r=>r.Author).Where(predicate);
         //}
 
-        public ReviewViewModel GetReviewViewModel(int id)
-        {
-            Review review = ArticlesContext.Reviews.Find(id);
-            if (review!=null)
-            {
-                ArticlesContext.Entry(review).Reference(r => r.Author).Load();
-                return review.MapToViewModel();                
-            }
-            return null;
-        }
+        //public ReviewViewModel GetReviewViewModel(int id)
+        //{
+        //    Review review = ArticlesContext.Reviews.Find(id);
+        //    if (review!=null)
+        //    {
+        //        ArticlesContext.Entry(review).Reference(r => r.Author).Load();
+        //        return review.MapToViewModel();                
+        //    }
+        //    return null;
+        //}
 
-        public IEnumerable<ReviewViewModel> GetReviewsViewModels(int articleId)
-        {
-            return ArticlesContext.Reviews.Where(p=>p.ArticleId==articleId).Include(r => r.Author).Include(r=>r.Article).MaptoViewModel();
-        }
+        //public IEnumerable<ReviewViewModel> GetReviewsViewModels(int articleId)
+        //{
+        //    return ArticlesContext.Reviews.Where(p=>p.ArticleId==articleId).Include(r => r.Author).Include(r=>r.Article).MaptoViewModel();
+        //}
 
-        public IEnumerable<ReviewViewModel> GetReviewsViewModelsByAuthor(int authorId)
-        {
-            return this.All(includeProperties:"Author,Article").MaptoViewModel();
-            //return ArticlesContext.Reviews.Where(p => p.AuthorId == authorId).Include(r => r.Author).Include(r => r.Article).MaptoViewModel();
-        }
+        //public IEnumerable<ReviewViewModel> GetReviewsViewModelsByAuthor(int authorId)
+        //{
+        //    return this.All(filter:q=>q.AuthorId==authorId, 
+        //        orderBy:r=>r.OrderBy(q=>q.PublicationDate), 
+        //        includeProperties:"Author,Article").MaptoViewModel();            
+        //}
 
 
         public ArticlesContext ArticlesContext

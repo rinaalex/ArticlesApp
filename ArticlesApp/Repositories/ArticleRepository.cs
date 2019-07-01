@@ -27,7 +27,7 @@ namespace ArticlesApp.Repositories
 
         public ArticleViewModel GetArticleViewModel(int id)
         {
-            var article = this.Get(id);
+            var article = this.GetById(id);
             if(article!=null)
             {
                 ArticlesContext.Entry(article).Reference(a => a.Author).Load();

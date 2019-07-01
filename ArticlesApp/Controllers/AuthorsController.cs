@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ArticlesApp.Repositories;
 using ArticlesApp.Model;
-using ArticlesApp.ViewModels;
+using ArticlesApp.ViewModels.QueryObjects;
 
 namespace ArticlesApp.Controllers
 {
@@ -20,12 +20,13 @@ namespace ArticlesApp.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetAll()
+        public IActionResult Get()
         {
-            IEnumerable<AuthorViewModel> authors = unitOfWork.Authors.GetAuthorsViewModels();
+            IEnumerable<Author> authors = unitOfWork.AuthorsRepository.Get(
+                includeProperties:"Articles,Articles.Reviews");
             if(authors.Count()!=0)
             {
-                return Ok(unitOfWork.Authors.GetAuthorsViewModels());
+                return Ok(authors.MapToViewModel());
             }
             return NotFound();
         }
@@ -34,10 +35,11 @@ namespace ArticlesApp.Controllers
         [Authorize]
         public IActionResult Get(int id)
         {
-            var result = unitOfWork.Authors.GetAuthorViewModel(id);
-            if(result!=null)
+            Author author = unitOfWork.AuthorsRepository.Get(filter:a=>a.Id==id,
+                includeProperties: "Articles,Articles.Reviews").FirstOrDefault();
+            if(author!=null)
             {
-                return Ok();
+                return Ok(author.MapToViewModel());
             }
             return NotFound();
         }

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Linq;
 
 namespace ArticlesApp.Interfaces
 {
     public interface IRepository<TEntity> where TEntity: class
     {
-        TEntity Get(int id);
-        IEnumerable<TEntity> All();
-        IEnumerable<TEntity> All(string includeProperties);
-        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+        TEntity GetById(int id);
+        IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null, string includeProperties = "");
 
         void Add(TEntity entity);
         void Update(TEntity entity);

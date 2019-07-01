@@ -17,7 +17,7 @@ namespace ArticlesApp.Repositories
 
         public AuthorViewModel GetAuthorViewModel(int id)
         {
-            Author author = this.Get(id);
+            Author author = this.GetById(id);
             if(author!=null)
             {
                 ArticlesContext.Entry(author).Collection(a => a.Articles).Load();

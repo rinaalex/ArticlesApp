@@ -71,7 +71,7 @@ namespace ArticlesApp.Controllers
                 
                 if (identity == null)
                 {
-                    unitOfWork.Authors.Add(new Author { Login = model.Login, Password = model.Password });
+                    unitOfWork.AuthorsRepository.Add(new Author { Login = model.Login, Password = model.Password });
                     unitOfWork.Complete(); //await?
                     // авторизация?
                     return Ok(); //redirection ?
@@ -91,8 +91,8 @@ namespace ArticlesApp.Controllers
 
         private ClaimsIdentity GetIdentity(string login, string password)
         {
-            var user = unitOfWork.Authors.
-                    Find(p => p.Login == login && p.Password == password).FirstOrDefault();
+            var user = unitOfWork.AuthorsRepository.
+                    Get(filter: p => p.Login == login && p.Password == password).FirstOrDefault();
 
             if (user != null)
             {

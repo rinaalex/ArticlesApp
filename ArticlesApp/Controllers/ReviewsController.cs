@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,24 +23,28 @@ namespace ArticlesApp.Controllers
             unitOfWork = new UnitOfWork(context);
         }
 
+        // Все отзывы автора
         [HttpGet("/api/authors/{id}/reviews")]
         public IActionResult GetByAuthor(int id)
         {
-            IEnumerable<ReviewViewModel> reviews = unitOfWork.Reviews.GetReviewsViewModelsByAuthor(id);
+            IEnumerable<Review> reviews = unitOfWork.ReviewsRepository.Get(filter: q => q.AuthorId == id,
+                orderBy: r => r.OrderBy(q => q.PublicationDate), includeProperties: "Author,Article");
             if (reviews.Count() != 0)
             {
-                return Ok(reviews);
+                return Ok(reviews.MaptoViewModel());
             }
             return NotFound();
         }
 
+        // Все отзывы на статью
         [HttpGet("/api/articles/{id}/reviews")]
         public IActionResult Get(int id)
         {
-            IEnumerable<ReviewViewModel> reviews = unitOfWork.Reviews.GetReviewsViewModels(id);
+            IEnumerable<Review> reviews = unitOfWork.ReviewsRepository.Get(
+                filter: r => r.ArticleId == id, includeProperties: "Article,Author");
             if (reviews.Count() != 0)
             {
-                return Ok(reviews);
+                return Ok(reviews.MaptoViewModel());
             }
             return NotFound();
         }
@@ -57,23 +60,25 @@ namespace ArticlesApp.Controllers
                 NumStars = newReview.NumStars,
                 PublicationDate = DateTime.UtcNow
             };
-            unitOfWork.Reviews.Add(review);
+            unitOfWork.ReviewsRepository.Add(review);
             unitOfWork.Complete();
-            newReview = unitOfWork.Reviews.GetReviewViewModel(review.Id);
+            newReview = unitOfWork.ReviewsRepository.Get(filter: r=>r.Id==review.Id,
+                includeProperties:"Article,Author").FirstOrDefault().MapToViewModel();
             return Ok(newReview);
         }
 
         [HttpPut]
         public IActionResult Update([FromBody]ReviewViewModel updatedReview)
         {
-            Review review = unitOfWork.Reviews.Find(r => r.Id == updatedReview.Id).FirstOrDefault();
+            Review review = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == updatedReview.Id,
+                includeProperties:"Article,Author").FirstOrDefault();
             if(review!=null)
             {
                 review.Content = updatedReview.Content;
                 review.PublicationDate = DateTime.UtcNow;
-                unitOfWork.Reviews.Update(review);
+                unitOfWork.ReviewsRepository.Update(review);
                 unitOfWork.Complete();
-                updatedReview = unitOfWork.Reviews.GetReviewViewModel(updatedReview.Id);
+                updatedReview = unitOfWork.ReviewsRepository.Get(filter: r=>r.Id==updatedReview.Id).FirstOrDefault().MapToViewModel();
                 return Ok(updatedReview);
             }
             return NotFound();
@@ -82,10 +87,10 @@ namespace ArticlesApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Remove(int id)
         {
-            Review review = unitOfWork.Reviews.Get(id);
+            Review review = unitOfWork.ReviewsRepository.GetById(id);
             if(review!=null)
             {
-                unitOfWork.Reviews.Delete(id);
+                unitOfWork.ReviewsRepository.Delete(id);
                 unitOfWork.Complete();
                 return NoContent();
             }

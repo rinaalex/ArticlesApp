@@ -6,8 +6,8 @@ namespace ArticlesApp.Interfaces
 {
     public interface IReviewRepository: IRepository<Review>
     {
-        ReviewViewModel GetReviewViewModel(int id);
-        IEnumerable<ReviewViewModel> GetReviewsViewModels(int articleId);
-        IEnumerable<ReviewViewModel> GetReviewsViewModelsByAuthor(int authorId);
+        //ReviewViewModel GetReviewViewModel(int id);
+        //IEnumerable<ReviewViewModel> GetReviewsViewModels(int articleId);
+        //IEnumerable<ReviewViewModel> GetReviewsViewModelsByAuthor(int authorId);
     }
 }

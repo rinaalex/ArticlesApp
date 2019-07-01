@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using ArticlesApp.Model;
 using ArticlesApp.Repositories;
 using ArticlesApp.ViewModels;
+using ArticlesApp.ViewModels.QueryObjects;
 
 namespace ArticlesApp.Controllers
 {
@@ -24,10 +25,10 @@ namespace ArticlesApp.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<ArticleViewModel> articles = unitOfWork.Articles.GetArticlesViewModels();
+            IEnumerable<Article> articles = unitOfWork.ArticlesRepository.Get(includeProperties:"Author,Reviews");
             if(articles.Count()!=0)
             {
-                return Ok();
+                return Ok(articles.MapToViewModel());
             }
             return NotFound();
         }
@@ -35,13 +36,26 @@ namespace ArticlesApp.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var article = unitOfWork.Articles.GetArticleViewModel(id);
+            Article article = unitOfWork.ArticlesRepository.Get(filter:a=>a.Id==id, includeProperties: "Author,Reviews").FirstOrDefault();
             if (article!=null)
             {
-                return Ok(article);
+                return Ok(article.MapToViewModel());
             }                
             return NotFound();
         }        
+
+        // Все статьи автора
+        [HttpGet("/api/authors/{id}/articles")]
+        public IActionResult GetArticlesByAuthor(int id)
+        {
+            IEnumerable<Article> articles = unitOfWork.ArticlesRepository.Get(
+                filter: a => a.AuthorId == id, includeProperties: "Author,Reviews");
+            if(articles.Count()!=0)
+            {
+                return Ok(articles.MapToViewModel());
+            }
+            return NotFound();
+        }
 
         [HttpPost]
         public IActionResult Create(ArticleViewModel newAarticle)
@@ -53,25 +67,27 @@ namespace ArticlesApp.Controllers
                 PublicationDate = DateTime.UtcNow,
                 AuthorId = int.Parse(this.HttpContext.User.Identity.Name)
             };            
-            unitOfWork.Articles.Add(article);
+            unitOfWork.ArticlesRepository.Add(article);
             unitOfWork.Complete();
-            newAarticle = unitOfWork.Articles.GetArticleViewModel(newAarticle.Id);
-            return Ok(newAarticle); // redirect?
+            article = unitOfWork.ArticlesRepository.Get(
+                filter:a=>a.Id==article.Id,includeProperties:"Author,Reviews").FirstOrDefault();
+            return Ok(article.MapToViewModel()); 
         }
 
         [HttpPut]
         public IActionResult Update(ArticleViewModel updatedArticle)
         {
-            Article article = unitOfWork.Articles.Get(updatedArticle.Id);
+            Article article = unitOfWork.ArticlesRepository.GetById(updatedArticle.Id);
             if (article != null)
             {
                 article.Title = updatedArticle.Title;
                 article.Content = updatedArticle.Content;
                 //article.UpdateDate = DateTime.UtcNow;
-                unitOfWork.Articles.Update(article);
+                unitOfWork.ArticlesRepository.Update(article);
                 unitOfWork.Complete();
-                updatedArticle = unitOfWork.Articles.GetArticleViewModel(updatedArticle.Id);
-                return Ok(updatedArticle);
+                article = unitOfWork.ArticlesRepository.Get(
+                    filter: a => a.Id == article.Id, includeProperties: "Author,Reviews").FirstOrDefault();
+                return Ok(article.MapToViewModel());
             }
             return NotFound();
         }
@@ -79,10 +95,10 @@ namespace ArticlesApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Remove(int id)
         {
-            Article article = unitOfWork.Articles.Get(id);
+            Article article = unitOfWork.ArticlesRepository.GetById(id);
             if(article!=null)
             {
-                unitOfWork.Articles.Delete(id);
+                unitOfWork.ArticlesRepository.Delete(id);
                 unitOfWork.Complete();
                 return NoContent();
             }
