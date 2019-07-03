@@ -1,12 +1,12 @@
-﻿using ArticlesApp.Model;
-using ArticlesApp.Repositories;
-using ArticlesApp.ViewModels;
-using ArticlesApp.ViewModels.QueryObjects;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using ArticlesApp.Model;
+using ArticlesApp.Repositories;
+using ArticlesApp.ViewModels.Articles.QueryObjects;
+using ArticlesApp.ViewModels.Articles;
 
 namespace ArticlesApp.Controllers
 {
@@ -23,12 +23,14 @@ namespace ArticlesApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
-        {
+        public IActionResult Get([FromQuery] string sort="")
+        {            
             IEnumerable<Article> articles = unitOfWork.ArticlesRepository.Get(includeProperties: "Author,Reviews");
             if (articles.Count() != 0)
-            {
-                return Ok(articles.MapToViewModel());
+            {                
+                if(ArticleListSort.OrderDictionary.ContainsKey(sort))
+                    return Ok(articles.MapToViewModel().OrderArticlesBy(ArticleListSort.OrderDictionary[sort]));
+                return Ok(articles.MapToViewModel().OrderArticlesBy(ArciclesOrderByOptions.SimpleOrder));
             }
             return NotFound();
         }
@@ -46,16 +48,20 @@ namespace ArticlesApp.Controllers
 
         // Все статьи автора
         [HttpGet("/api/authors/{id}/articles")]
-        public IActionResult GetArticlesByAuthor(int id)
+        public IActionResult GetArticlesByAuthor(int id, [FromQuery] string sort="")
         {
             IEnumerable<Article> articles = unitOfWork.ArticlesRepository.Get(
                 filter: a => a.AuthorId == id, includeProperties: "Author,Reviews");
             if (articles.Count() != 0)
             {
-                return Ok(articles.MapToViewModel());
+                if (ArticleListSort.OrderDictionary.ContainsKey(sort))
+                    return Ok(articles.MapToViewModel().OrderArticlesBy(ArticleListSort.OrderDictionary[sort]));
+                return Ok(articles.MapToViewModel().OrderArticlesBy(ArciclesOrderByOptions.SimpleOrder));
             }
             return NotFound();
         }
+
+        
 
         [HttpPost]
         public IActionResult Create([FromBody] ArticleViewModel newAarticle)
@@ -75,7 +81,7 @@ namespace ArticlesApp.Controllers
                     unitOfWork.Complete();
                     article = unitOfWork.ArticlesRepository.Get(
                         filter: a => a.Id == article.Id, includeProperties: "Author,Reviews").FirstOrDefault();
-                    return CreatedAtAction(nameof(Get), new {id=article.Id }, article.MapToViewModel());
+                    return CreatedAtAction(nameof(Get), new { id = article.Id }, article.MapToViewModel());
                 }
             }
             catch (Exception ex)
@@ -95,7 +101,7 @@ namespace ArticlesApp.Controllers
                     Article article = unitOfWork.ArticlesRepository.GetById(updatedArticle.Id);
                     if (article != null)
                     {
-                        if(article.AuthorId==int.Parse(User.Identity.Name))
+                        if (article.AuthorId == int.Parse(User.Identity.Name))
                         {
                             article.Title = updatedArticle.Title;
                             article.Content = updatedArticle.Content;
@@ -111,10 +117,10 @@ namespace ArticlesApp.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ModelState.AddModelError("error", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
-            }            
+            }
             return BadRequest(ModelState);
         }
 
@@ -124,7 +130,7 @@ namespace ArticlesApp.Controllers
             Article article = unitOfWork.ArticlesRepository.GetById(id);
             if (article != null)
             {
-                if(article.AuthorId==int.Parse(User.Identity.Name))
+                if (article.AuthorId == int.Parse(User.Identity.Name))
                 {
                     unitOfWork.ArticlesRepository.Delete(id);
                     unitOfWork.Complete();

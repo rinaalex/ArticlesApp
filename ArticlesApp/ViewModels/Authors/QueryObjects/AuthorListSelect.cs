@@ -2,9 +2,12 @@
 using System.Linq;
 using ArticlesApp.Model;
 
-namespace ArticlesApp.ViewModels.QueryObjects
+namespace ArticlesApp.ViewModels.Authors.QueryObjects
 {
-    public static class AuthorListToViewModel
+    /// <summary>
+    /// Выполняет преобразование Author в AuthorViewModel
+    /// </summary>
+    public static class AuthorListSelect
     {
         public static IEnumerable<AuthorViewModel>MapToViewModel(this IEnumerable<Author> authors)
         {
@@ -16,8 +19,8 @@ namespace ArticlesApp.ViewModels.QueryObjects
             return new AuthorViewModel
             {
                 Username = author.Login,
-                NumOfArticles = author.Articles.Count(),
-                Raiting = Raiting(author)
+                NumOfArticles = author.Articles.Count,
+                Raiting = author.Articles.Count ==0 ? 0 : Raiting(author)
             };
         }
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ArticlesApp.Repositories;
 using ArticlesApp.Model;
-using ArticlesApp.ViewModels.QueryObjects;
+using ArticlesApp.ViewModels.Authors.QueryObjects;
 
 namespace ArticlesApp.Controllers
 {
@@ -20,12 +20,14 @@ namespace ArticlesApp.Controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] string sort="")
         {
             IEnumerable<Author> authors = unitOfWork.AuthorsRepository.Get(
                 includeProperties:"Articles,Articles.Reviews");
             if(authors.Count()!=0)
             {
+                if (AuthorListSort.OrderDictionary.ContainsKey(sort))
+                    return Ok(authors.MapToViewModel().OrderAuthorsBy(AuthorListSort.OrderDictionary[sort]));
                 return Ok(authors.MapToViewModel());
             }
             return NotFound();

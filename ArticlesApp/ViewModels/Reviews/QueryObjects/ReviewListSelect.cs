@@ -2,9 +2,12 @@
 using System.Linq;
 using ArticlesApp.Model;
 
-namespace ArticlesApp.ViewModels.QueryObjects
+namespace ArticlesApp.ViewModels.Reviews.QueryObjects
 {
-    public static class ReviewsListToViewModel
+    /// <summary>
+    /// Выполняет преобразование Review в ReviewViewModel
+    /// </summary>
+    public static class ReviewListSelect
     {
         public static IEnumerable<ReviewViewModel> MaptoViewModel(this IEnumerable<Review> reviews)
         {

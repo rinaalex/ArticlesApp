@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ArticlesApp.ViewModels
+﻿namespace ArticlesApp.ViewModels.Accounts
 {
     public class AuthResult
     {

@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ArticlesApp.Repositories;
 using ArticlesApp.Model;
-using ArticlesApp.ViewModels;
-using ArticlesApp.ViewModels.QueryObjects;
+using ArticlesApp.ViewModels.Reviews;
+using ArticlesApp.ViewModels.Reviews.QueryObjects;
 
 namespace ArticlesApp.Controllers
 {
@@ -25,26 +24,30 @@ namespace ArticlesApp.Controllers
 
         // Все отзывы автора
         [HttpGet("/api/authors/{id}/reviews")]
-        public IActionResult GetByAuthor(int id)
+        public IActionResult GetByAuthor(int id, [FromQuery] string sort="")
         {
             IEnumerable<Review> reviews = unitOfWork.ReviewsRepository.Get(filter: q => q.AuthorId == id,
                 orderBy: r => r.OrderBy(q => q.PublicationDate), includeProperties: "Author,Article");
             if (reviews.Count() != 0)
             {
-                return Ok(reviews.MaptoViewModel());
+                if (ReviewListSort.OrderDictionary.ContainsKey(sort))
+                    return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewListSort.OrderDictionary[sort]));
+                return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewOrderByOptions.Simple));
             }
             return NotFound();
         }
 
         // Все отзывы на статью
         [HttpGet("/api/articles/{id}/reviews")]
-        public IActionResult Get(int id)
+        public IActionResult Get(int id, [FromQuery] string sort="")
         {
             IEnumerable<Review> reviews = unitOfWork.ReviewsRepository.Get(
                 filter: r => r.ArticleId == id, includeProperties: "Article,Author");
             if (reviews.Count() != 0)
             {
-                return Ok(reviews.MaptoViewModel());
+                if (ReviewListSort.OrderDictionary.ContainsKey(sort))
+                    return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewListSort.OrderDictionary[sort]));
+                return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewOrderByOptions.Simple));
             }
             return NotFound();
         }

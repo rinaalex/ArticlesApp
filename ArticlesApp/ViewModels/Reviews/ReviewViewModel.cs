@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ArticlesApp.ViewModels
+namespace ArticlesApp.ViewModels.Reviews
 {
     public class ReviewViewModel
     {

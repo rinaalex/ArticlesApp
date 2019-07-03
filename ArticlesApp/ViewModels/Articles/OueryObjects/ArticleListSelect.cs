@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using ArticlesApp.Model;
 
-namespace ArticlesApp.ViewModels.QueryObjects
+namespace ArticlesApp.ViewModels.Articles.QueryObjects
 {
-    public static class ArticleListToViewModel
+    /// <summary>
+    /// Выполняет преобразование Acticle в ArticleViewModel
+    /// </summary>
+    public static class ArticleListSelect
     {
         public static IEnumerable<ArticleViewModel> MapToViewModel(this IEnumerable<Article> articles)
         {
