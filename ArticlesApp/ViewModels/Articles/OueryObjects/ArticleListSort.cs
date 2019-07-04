@@ -65,5 +65,19 @@ namespace ArticlesApp.ViewModels.Articles.QueryObjects
                 default: return articles.OrderBy(a => a.Id);
             }
         }
+
+        /// <summary>
+        /// Выполняет преобразование строки в параметр сортировки
+        /// </summary>
+        /// <param name="key">Ключ сортировки</param>
+        /// <returns>Параметр сортировки</returns>
+        public static ArciclesOrderByOptions ParseOrderByOptions(string key)
+        {
+            if(OrderDictionary.ContainsKey(key))
+            {
+                return OrderDictionary[key];
+            }
+            return ArciclesOrderByOptions.SimpleOrder;
+        }
     }
 }

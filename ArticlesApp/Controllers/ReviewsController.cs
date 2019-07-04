@@ -30,9 +30,7 @@ namespace ArticlesApp.Controllers
                 orderBy: r => r.OrderBy(q => q.PublicationDate), includeProperties: "Author,Article");
             if (reviews.Count() != 0)
             {
-                if (ReviewListSort.OrderDictionary.ContainsKey(sort))
-                    return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewListSort.OrderDictionary[sort]));
-                return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewOrderByOptions.Simple));
+                return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewListSort.ParseOrderByOptions(sort)));
             }
             return NotFound();
         }
@@ -45,9 +43,7 @@ namespace ArticlesApp.Controllers
                 filter: r => r.ArticleId == id, includeProperties: "Article,Author");
             if (reviews.Count() != 0)
             {
-                if (ReviewListSort.OrderDictionary.ContainsKey(sort))
-                    return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewListSort.OrderDictionary[sort]));
-                return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewOrderByOptions.Simple));
+                return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewListSort.ParseOrderByOptions(sort)));
             }
             return NotFound();
         }

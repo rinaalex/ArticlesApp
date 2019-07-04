@@ -26,9 +26,7 @@ namespace ArticlesApp.Controllers
                 includeProperties:"Articles,Articles.Reviews");
             if(authors.Count()!=0)
             {
-                if (AuthorListSort.OrderDictionary.ContainsKey(sort))
-                    return Ok(authors.MapToViewModel().OrderAuthorsBy(AuthorListSort.OrderDictionary[sort]));
-                return Ok(authors.MapToViewModel());
+                return Ok(authors.MapToViewModel().OrderAuthorsBy(AuthorListSort.ParseOrderByOptions(sort)));
             }
             return NotFound();
         }

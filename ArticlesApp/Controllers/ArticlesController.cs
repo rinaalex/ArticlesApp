@@ -28,9 +28,7 @@ namespace ArticlesApp.Controllers
             IEnumerable<Article> articles = unitOfWork.ArticlesRepository.Get(includeProperties: "Author,Reviews");
             if (articles.Count() != 0)
             {                
-                if(ArticleListSort.OrderDictionary.ContainsKey(sort))
-                    return Ok(articles.MapToViewModel().OrderArticlesBy(ArticleListSort.OrderDictionary[sort]));
-                return Ok(articles.MapToViewModel().OrderArticlesBy(ArciclesOrderByOptions.SimpleOrder));
+                return Ok(articles.MapToViewModel().OrderArticlesBy(ArticleListSort.ParseOrderByOptions(sort)));
             }
             return NotFound();
         }
@@ -54,14 +52,10 @@ namespace ArticlesApp.Controllers
                 filter: a => a.AuthorId == id, includeProperties: "Author,Reviews");
             if (articles.Count() != 0)
             {
-                if (ArticleListSort.OrderDictionary.ContainsKey(sort))
-                    return Ok(articles.MapToViewModel().OrderArticlesBy(ArticleListSort.OrderDictionary[sort]));
-                return Ok(articles.MapToViewModel().OrderArticlesBy(ArciclesOrderByOptions.SimpleOrder));
+                return Ok(articles.MapToViewModel().OrderArticlesBy(ArticleListSort.ParseOrderByOptions(sort)));
             }
             return NotFound();
-        }
-
-        
+        }               
 
         [HttpPost]
         public IActionResult Create([FromBody] ArticleViewModel newAarticle)

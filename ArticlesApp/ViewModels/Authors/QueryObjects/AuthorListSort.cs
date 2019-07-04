@@ -54,6 +54,20 @@ namespace ArticlesApp.ViewModels.Authors.QueryObjects
                 case AuthorOrderByOptions.Simple:  default:
                     return authors;
             }
-        }     
+        }
+
+        /// <summary>
+        /// Выполняет преобразование строки в параметр сортировки
+        /// </summary>
+        /// <param name="key">Ключ сортировки</param>
+        /// <returns>Параметр сортировки</returns>
+        public static AuthorOrderByOptions ParseOrderByOptions(string key)
+        {
+            if(OrderDictionary.ContainsKey(key))
+            {
+                return OrderDictionary[key];
+            }
+            return AuthorOrderByOptions.Simple;
+        }
     }
 }

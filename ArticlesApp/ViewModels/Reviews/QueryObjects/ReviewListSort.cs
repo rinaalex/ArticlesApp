@@ -47,5 +47,19 @@ namespace ArticlesApp.ViewModels.Reviews.QueryObjects
                     return reviews.OrderBy(r => r.Id);
             }
         }
+
+        /// <summary>
+        /// Выполняет преобразование строки в параметр сортировки
+        /// </summary>
+        /// <param name="key">Ключ сортировки</param>
+        /// <returns>Параметр сортировки</returns>
+        public static ReviewOrderByOptions ParseOrderByOptions(string key)
+        {
+            if(OrderDictionary.ContainsKey(key))
+            {
+                return OrderDictionary[key];
+            }
+            return ReviewOrderByOptions.Simple;
+        }
     }
 }
