@@ -4,12 +4,15 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="ArticlesAppMobile.UI.Pages.Accounts.LoginPage">
+             x:Class="ArticlesAppMobile.UI.Pages.Accounts.LoginPage"
+             Title="Login page">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Welcome to Xamarin.Forms!"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
+            <Button Text="Submit" Command="{Binding SubmitCommand}"/>
+            <Button Text="Registration" Command="{Binding RegistrationCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

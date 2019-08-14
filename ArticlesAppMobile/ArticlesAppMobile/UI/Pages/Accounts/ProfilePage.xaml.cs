@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using ArticlesAppMobile.BL.ViewModels.Accounts;
+
 namespace ArticlesAppMobile.UI.Pages.Accounts
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,6 +17,7 @@ namespace ArticlesAppMobile.UI.Pages.Accounts
         public ProfilePage()
         {
             InitializeComponent();
+            BindingContext = new ProfileViewModel { Navigation = this.Navigation };
         }
     }
 }

@@ -4,12 +4,13 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="ArticlesAppMobile.UI.Pages.Articles.ArticlePage">
+             x:Class="ArticlesAppMobile.UI.Pages.Articles.ArticlePage"
+             Title="Article page">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Edit article" Command="{Binding EditArticleCommand}"/>
+            <Button Text="Add review" Command="{Binding AddReviewCommand}"/>
+            <Button Text="Show reviews" Command="{Binding ShowReviewsCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using ArticlesAppMobile.BL.ViewModels.Articles;
+
 namespace ArticlesAppMobile.UI.Pages.Articles
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,6 +17,7 @@ namespace ArticlesAppMobile.UI.Pages.Articles
         public AddArticlePage()
         {
             InitializeComponent();
+            BindingContext = new AddArticleViewModel { Navigation = this.Navigation };
         }
     }
 }

@@ -7,9 +7,7 @@
              x:Class="ArticlesAppMobile.UI.Pages.Accounts.EditProfilePage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Save" Command="{Binding SaveCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

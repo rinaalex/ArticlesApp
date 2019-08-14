@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using ArticlesAppMobile.BL.ViewModels.Reviews;
+
 namespace ArticlesAppMobile.UI.Pages.Reviews
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,6 +17,7 @@ namespace ArticlesAppMobile.UI.Pages.Reviews
         public MyReviewsPage()
         {
             InitializeComponent();
+            BindingContext = new MyReviewsViewModel { Navigation = this.Navigation };
         }
     }
 }

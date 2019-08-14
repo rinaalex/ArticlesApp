@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using ArticlesAppMobile.BL.ViewModels.Authors;
+
 namespace ArticlesAppMobile.UI.Pages.Authors
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,6 +17,7 @@ namespace ArticlesAppMobile.UI.Pages.Authors
         public AuthorsProfilePage()
         {
             InitializeComponent();
+            BindingContext = new AuthorsProfileViewModel { Navigation = this.Navigation };
         }
     }
 }

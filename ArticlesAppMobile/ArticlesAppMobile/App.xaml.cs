@@ -1,6 +1,8 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using ArticlesAppMobile.UI.Pages.Accounts;
+using ArticlesAppMobile.BL.ViewModels.Accounts;
 
 namespace ArticlesAppMobile
 {
@@ -10,7 +12,10 @@ namespace ArticlesAppMobile
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new NavigationPage(new LoginPage
+            {
+                //BindingContext = new 
+            });
         }
 
         protected override void OnStart()

@@ -4,12 +4,11 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="ArticlesAppMobile.UI.Pages.Reviews.AddReviewPage">
+             x:Class="ArticlesAppMobile.UI.Pages.Reviews.AddReviewPage"
+             Title="Add review">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Save review" Command="{Binding SaveReviewCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

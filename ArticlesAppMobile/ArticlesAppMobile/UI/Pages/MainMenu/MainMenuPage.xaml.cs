@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+using ArticlesAppMobile.BL.ViewModels.MainMenu;
+
 namespace ArticlesAppMobile.UI.Pages.MainMenu
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
@@ -15,6 +17,7 @@ namespace ArticlesAppMobile.UI.Pages.MainMenu
         public MainMenuPage()
         {
             InitializeComponent();
+            BindingContext = new MainMenuViewModel { Navigation = this.Navigation };
         }
     }
 }

@@ -4,12 +4,11 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="ArticlesAppMobile.UI.Pages.Authors.AuthorsProfilePage">
+             x:Class="ArticlesAppMobile.UI.Pages.Authors.AuthorsProfilePage"
+             Title="Authors profile">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Show articles" Command="{Binding ShowArticlesByAuthorCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

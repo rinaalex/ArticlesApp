@@ -1,25 +1,25 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Xamarin.Forms;
 
 using ArticlesAppMobile.UI.Pages.Reviews;
 
 namespace ArticlesAppMobile.BL.ViewModels.Reviews
 {
-    public class ReviewViewModel: BaseViewModel
+    public class MyReviewsViewModel: BaseViewModel
     {
-        public int Id { get; set; }
-        public string ArticleName { get; set; }
-        public string Content { get; set; }
-        public byte NumStars { get; set; }
-        public string AuthorName { get; set; }
-        public DateTime PublicationDate { get; set; }
-
+        public ICommand ShowReviewCommand { get; set; }
         public ICommand EditReviewCommand { get; set; }
 
-        public ReviewViewModel()
+        public MyReviewsViewModel()
         {
+            ShowReviewCommand = new Command(ShowReview);
             EditReviewCommand = new Command(EditReview);
+        }
+
+        public async void ShowReview()
+        {
+            ReviewPage reviewPage = new ReviewPage();
+            await Navigation.PushAsync(reviewPage);
         }
 
         public async void EditReview()

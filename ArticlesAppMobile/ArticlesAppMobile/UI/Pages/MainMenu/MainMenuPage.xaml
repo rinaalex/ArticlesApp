@@ -4,12 +4,13 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="ArticlesAppMobile.UI.Pages.MainMenu.MainMenuPage">
+             x:Class="ArticlesAppMobile.UI.Pages.MainMenu.MainMenuPage"
+             Title="Main menu">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Button Text="Articles" Command="{Binding ShowArticlesCommand}"/>
+            <Button Text="Authors" Command="{Binding ShowAuthorsCommand}"/>
+            <Button Text="Profile" Command="{Binding ShowProfileCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
