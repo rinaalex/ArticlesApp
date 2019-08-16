@@ -9,13 +9,6 @@ namespace ArticlesAppMobile.BL.ViewModels.Articles
 {
     public class ArticleViewModel: BaseViewModel
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Content { get; set; }
-        public DateTime PublicationDate { get; set; }
-        public string AuthorName { get; set; }
-        public float Raiting { get; set; }
-
         public ICommand EditArticleCommand { get; set; }
         public ICommand AddReviewCommand { get; set; }
         public ICommand ShowReviewsCommand { get; set; }

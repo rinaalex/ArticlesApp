@@ -1,11 +1,15 @@
 ﻿using System.Windows.Input;
 using Xamarin.Forms;
+using System.Collections.Generic;
 using ArticlesAppMobile.UI.Pages.Articles;
 
 namespace ArticlesAppMobile.BL.ViewModels.Articles
 {
     public class ArticleListViewModel: BaseViewModel
     {
+        //public Article SelectedArticle { get; set; }
+        //public List<Article> ArticlesList { get; set; }
+
         public ICommand AddArticleCommand { get; set; }
         public ICommand ShowArticleCommand { get; set; }
 
