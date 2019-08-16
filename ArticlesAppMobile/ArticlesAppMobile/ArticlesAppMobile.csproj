@@ -21,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ArticlesApp.DAL\ArticlesApp.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="UI\Pages\Accounts\EditProfilePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

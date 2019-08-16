@@ -45,6 +45,11 @@ namespace ArticlesAppMobile.Helpers
             if(CallPropertyChangeEvent)
                 OnPropertyChanging(name);
 
+            _properties.AddOrUpdate(name, value, (s, o) => value);
+
+            if (CallPropertyChangeEvent)
+                OnPropertyChanged(name);
+
             return true;
         }
     }

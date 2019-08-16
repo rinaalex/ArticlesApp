@@ -8,10 +8,11 @@
              Title="Login page">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-            <Button Text="Submit" Command="{Binding SubmitCommand}"/>
+            <Label Text="Username"/>
+            <Entry Text="{Binding LoginModel.Login}"/>
+            <Label Text="Password"/>
+            <Entry Text="{Binding LoginModel.Password}" IsPassword="True"/>
+            <Button Text="Login" Command="{Binding SubmitCommand}"/>
             <Button Text="Registration" Command="{Binding RegistrationCommand}"/>
         </StackLayout>
     </ContentPage.Content>
