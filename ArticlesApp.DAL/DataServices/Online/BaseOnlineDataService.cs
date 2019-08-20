@@ -12,7 +12,7 @@ namespace ArticlesApp.DAL.DataServices.Online
 
         public BaseOnlineDataService()
         {
-            HttpClient = new HttpClient(new HttpClientHandler());
+            HttpClient = new HttpClient(new HttpClientHandler()) { BaseAddress = new Uri(Constants.BaseAddress)};
         }
     }
 }

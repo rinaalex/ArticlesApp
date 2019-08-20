@@ -10,7 +10,7 @@ namespace ArticlesApp.DAL.DataServices.Online
 
         public AccountDataService():base()
         {
-            _accountDataService = RestService.For<IAccountDataService>(Constants.BaseAddress);
+            _accountDataService = RestService.For<IAccountDataService>(HttpClient);
         }
 
         public async Task<AuthResultObject> Authorize(LoginObject loginObject)
