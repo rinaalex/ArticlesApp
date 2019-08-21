@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Refit;
-using ArticlesApp.DAL.DataObjects;
 
 namespace ArticlesApp.DAL.DataServices.Online
 {
@@ -16,11 +13,6 @@ namespace ArticlesApp.DAL.DataServices.Online
             {
                 AuthorizationHeaderValueGetter = () => Task.FromResult(token)
             });
-        }
-
-        public async Task<List<ArticleObject>> GetArticlesList()
-        {
-            return await _mainMenuDataService.GetArticlesList();
-        }
+        }        
     }
 }

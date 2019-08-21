@@ -10,7 +10,7 @@ namespace ArticlesApp.DAL.DataServices
             if(!isMock)
             {
                 Account = new AccountDataService();
-                MainMenu = new MainMenuDataService();
+                Articles = new ArticlesDataService();
             }
             else
             {
@@ -19,6 +19,6 @@ namespace ArticlesApp.DAL.DataServices
         }
 
         public static AccountDataService Account { get; private set; }
-        public static MainMenuDataService MainMenu { get; set; }
+        public static ArticlesDataService Articles { get; set; }
     }
 }
