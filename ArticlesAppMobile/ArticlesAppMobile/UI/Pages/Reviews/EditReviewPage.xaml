@@ -8,7 +8,12 @@
              Title="Edit review">
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="Content"/>
+            <Entry Text="{Binding Review.Content}"/>
+            <Label Text="Stars"/>
+            <Entry Text="{Binding Review.NumStars}"/>
             <Button Text="Save" Command="{Binding SaveReviewCommand}"/>
+            <Label Text="{Binding LastError}" IsEnabled="{Binding HasError}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -8,7 +8,12 @@
              Title="Registration page">
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="Login"/>
+            <Entry Text="{Binding LoginObject.Login}"/>
+            <Label Text="Password"/>
+            <Entry Text="{Binding LoginObject.Password}"/>
             <Button Text="Submit" Command="{Binding SubmitCommand}"/>
+            <Label Text="{Binding LastError}" TextColor="Red" IsEnabled="{Binding HasError}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

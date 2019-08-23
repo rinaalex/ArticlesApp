@@ -14,10 +14,10 @@ namespace ArticlesAppMobile.UI.Pages.Authors
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AuthorsProfilePage : ContentPage
     {
-        public AuthorsProfilePage()
+        public AuthorsProfilePage(int authorId)
         {
             InitializeComponent();
-            BindingContext = new AuthorsProfileViewModel { Navigation = this.Navigation };
+            BindingContext = new AuthorsProfileViewModel(authorId) { Navigation = this.Navigation };
         }
     }
 }

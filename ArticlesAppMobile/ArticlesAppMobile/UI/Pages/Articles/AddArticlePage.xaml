@@ -8,7 +8,12 @@
              Title="Add article page">
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="Title"/>
+            <Entry Text="{Binding Article.Title}"/>
+            <Label Text="Content"/>
+            <Entry Text="{Binding Article.Content}"/>
             <Button Text="Save" Command="{Binding SaveArticleCommand}"/>
+            <Label Text="{Binding LastError}" IsEnabled="{Binding HasError}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -14,10 +14,10 @@ namespace ArticlesAppMobile.UI.Pages.Reviews
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ReviewsListPage : ContentPage
     {
-        public ReviewsListPage()
+        public ReviewsListPage(int articleId)
         {
             InitializeComponent();
-            BindingContext = new ReviewsListViewModel { Navigation = this.Navigation };
+            BindingContext = new ReviewsListViewModel(articleId) { Navigation = this.Navigation };
         }
     }
 }

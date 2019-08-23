@@ -8,8 +8,14 @@
              Title="My reviews">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Show review" Command="{Binding ShowReviewCommand}"/>
-            <Button Text="Edit review" Command="{Binding EditReviewCommand}"/>
+            <ListView ItemsSource="{Binding ReviewsList}" SelectedItem="{Binding Review}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding ArticleName}" Detail="{Binding NumStars}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Label Text="{Binding LastError}" IsEnabled="{Binding HasError}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

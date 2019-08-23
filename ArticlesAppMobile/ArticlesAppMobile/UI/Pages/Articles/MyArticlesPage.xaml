@@ -8,8 +8,14 @@
              Title="My articles">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Show article" Command="{Binding ShowArticleCommand}"/>
-            <Button Text="Edit article" Command="{Binding EditArticleCommand}"/>
+            <ListView ItemsSource="{Binding ArticlesList}" SelectedItem="{Binding Article}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Title}" Detail="{Binding Raiting}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Label Text="{Binding LastError}" IsEnabled="{Binding HasError}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

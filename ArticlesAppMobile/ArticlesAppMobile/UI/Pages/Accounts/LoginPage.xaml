@@ -14,6 +14,7 @@
             <Entry Text="{Binding LoginModel.Password}" IsPassword="True"/>
             <Button Text="Login" Command="{Binding SubmitCommand}"/>
             <Button Text="Registration" Command="{Binding RegistrationCommand}"/>
+            <Label Text="{Binding LastError}" IsEnabled="{Binding HasError}" TextColor="Red"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

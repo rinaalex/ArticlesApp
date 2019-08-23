@@ -8,7 +8,12 @@
              Title="Review page">
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="{Binding Review.AuthorName}"/>
+            <Entry Text="{Binding Review.Content}" IsReadOnly="True"/>
+            <Label Text="{Binding Review.NumStars}"/>
+            <Label Text="{Binding Review.PublicationDate}"/>
             <Button Text="Edit review" Command="{Binding EditReviewCommand}"/>
+            <Label Text="{Binding LastError}" IsEnabled="{Binding HasError}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

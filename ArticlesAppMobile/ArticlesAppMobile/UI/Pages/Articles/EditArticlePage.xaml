@@ -8,6 +8,10 @@
              Title="Edit article">
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="Title"/>
+            <Entry Text="{Binding Article.Title}"/>
+            <Label Text="Content"/>
+            <Entry Text="{Binding Article.Content}"/>
             <Button Text="Save" Command="{Binding SaveCommand}"/>
         </StackLayout>
     </ContentPage.Content>

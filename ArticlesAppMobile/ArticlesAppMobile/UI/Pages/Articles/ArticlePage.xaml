@@ -8,6 +8,11 @@
              Title="Article page">
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="{Binding Article.Title}"/>
+            <Entry Text="{Binding Article.Content}" IsReadOnly="True"/>
+            <Label Text="{Binding Article.AuthorName}"/>
+            <Label Text="{Binding Article.PublicationDate}"/>
+            <Label Text="{Binding Article.Raiting}"/>
             <Button Text="Edit article" Command="{Binding EditArticleCommand}"/>
             <Button Text="Add review" Command="{Binding AddReviewCommand}"/>
             <Button Text="Show reviews" Command="{Binding ShowReviewsCommand}"/>

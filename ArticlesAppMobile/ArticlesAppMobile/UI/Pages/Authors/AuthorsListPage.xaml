@@ -8,7 +8,14 @@
              Title="Authors list page">
     <ContentPage.Content>
         <StackLayout>
-            <Button Text="Show profile" Command="{Binding ShowAuthorsProfileCommand}"/>
+            <ListView ItemsSource="{Binding AuthorsList}" SelectedItem="{Binding Author}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding Username}" Detail="{Binding Raiting}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Label Text="{Binding LastError}" IsEnabled="{Binding HasError}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

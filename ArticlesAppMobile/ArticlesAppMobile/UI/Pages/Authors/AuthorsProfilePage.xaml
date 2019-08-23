@@ -8,6 +8,9 @@
              Title="Authors profile">
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="{Binding Author.Username}"/>
+            <Label Text="{Binding Author.NumOfArticles}"/>
+            <Label Text="{Binding Author.Raiting}"/>
             <Button Text="Show articles" Command="{Binding ShowArticlesByAuthorCommand}"/>
         </StackLayout>
     </ContentPage.Content>

@@ -14,10 +14,10 @@ namespace ArticlesAppMobile.UI.Pages.Articles
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ArticlePage : ContentPage
     {
-        public ArticlePage()
+        public ArticlePage(int artileId)
         {
             InitializeComponent();
-            BindingContext = new ArticleViewModel { Navigation = this.Navigation };
+            BindingContext = new ArticleViewModel(artileId) { Navigation = this.Navigation };
         }
     }
 }
