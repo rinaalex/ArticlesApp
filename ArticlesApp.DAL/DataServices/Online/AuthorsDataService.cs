@@ -17,7 +17,7 @@ namespace ArticlesApp.DAL.DataServices.Online
             });
         }
 
-        public async Task<List<AuthorObject>>GetAuthors(string sortOrder)
+        public async Task<List<AuthorObject>>GetAuthors(string sortOrder="asc")
         {
             try
             {

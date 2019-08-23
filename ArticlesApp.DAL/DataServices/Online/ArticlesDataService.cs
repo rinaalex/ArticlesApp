@@ -32,7 +32,7 @@ namespace ArticlesApp.DAL.DataServices.Online
         public async Task<ArticleObject>GetArticle(int articleId)
         {
             try
-            {articleId
+            {
                 return await _articlesDataService.GetArticle(articleId);
             }
             catch(ApiException ex)

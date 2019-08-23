@@ -42,6 +42,18 @@ namespace ArticlesApp.DAL.DataServices.Online
             }
         }
 
+        public async Task<ReviewObject> GetReview(int reviewId)
+        {
+            try
+            {
+                return await _reviewsDataService.GetReview(reviewId);
+            }
+            catch (ApiException ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<ReviewObject> CreateReview(int articleId, ReviewObject review)
         {
             try

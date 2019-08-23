@@ -15,6 +15,9 @@ namespace ArticlesApp.DAL.DataServices
         [Get("/articles/{id}/reviews")]
         Task<List<ReviewObject>> GetReviewsByArticle([AliasAs("id")] int articleId);
 
+        [Get("/reviews/{id}")]
+        Task<ReviewObject> GetReview([AliasAs("id")] int articleId);
+
         [Post("/articles/{id}/reviews")]
         Task<ReviewObject> CreateReview([AliasAs("id")] int articleId, [Body] ReviewObject review);
 
