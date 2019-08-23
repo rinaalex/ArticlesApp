@@ -24,7 +24,7 @@ namespace ArticlesApp.Controllers
 
         // Все отзывы автора
         [HttpGet("/api/authors/{id}/reviews")]
-        public IActionResult GetByAuthor(int id, [FromQuery] string sort="")
+        public IActionResult GetByAuthor(int id, [FromQuery] string sort = "")
         {
             IEnumerable<Review> reviews = unitOfWork.ReviewsRepository.Get(filter: q => q.AuthorId == id,
                 orderBy: r => r.OrderBy(q => q.PublicationDate), includeProperties: "Author,Article");
@@ -37,13 +37,24 @@ namespace ArticlesApp.Controllers
 
         // Все отзывы на статью
         [HttpGet("/api/articles/{id}/reviews")]
-        public IActionResult Get(int id, [FromQuery] string sort="")
+        public IActionResult GetByArticle(int id, [FromQuery] string sort = "")
         {
             IEnumerable<Review> reviews = unitOfWork.ReviewsRepository.Get(
                 filter: r => r.ArticleId == id, includeProperties: "Article,Author");
             if (reviews.Count() != 0)
             {
                 return Ok(reviews.MaptoViewModel().OrderReviewsBy(ReviewListSort.ParseOrderByOptions(sort)));
+            }
+            return NotFound();
+        }
+
+        [HttpGet ("{id}")]
+        public IActionResult Get(int id)
+        {
+            Review review = unitOfWork.ReviewsRepository.Get(filter: r => r.Id == id).FirstOrDefault();
+            if(review!=null)
+            {
+                return Ok(review);
             }
             return NotFound();
         }
@@ -96,6 +107,7 @@ namespace ArticlesApp.Controllers
                         if(review.AuthorId==int.Parse(User.Identity.Name))
                         {
                             review.Content = updatedReview.Content;
+                            review.NumStars = updatedReview.NumStars;
                             review.PublicationDate = DateTime.UtcNow;
                             unitOfWork.ReviewsRepository.Update(review);
                             unitOfWork.Complete();
