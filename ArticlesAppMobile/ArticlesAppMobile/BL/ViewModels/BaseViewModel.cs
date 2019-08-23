@@ -8,6 +8,17 @@ namespace ArticlesAppMobile.BL.ViewModels
     {
         public INavigation Navigation { get; set; }
 
+        public bool HasError
+        {
+            get => Get<bool>();
+            set => Set(value);
+        } 
+        public string LastError
+        {
+            get => Get<string>();
+            set => Set(value);
+        }
+
         public void Dispose()
         {
             Dispose(true);

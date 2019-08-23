@@ -20,7 +20,7 @@ namespace ArticlesAppMobile.BL.ViewModels.MainMenu
         }
 
         public async void ShowArticles()
-        {
+        {            
             ArticlesListPage articlesListPage = new ArticlesListPage();
             await Navigation.PushAsync(articlesListPage);
         }
