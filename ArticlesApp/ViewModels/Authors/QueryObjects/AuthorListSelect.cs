@@ -18,6 +18,7 @@ namespace ArticlesApp.ViewModels.Authors.QueryObjects
         {
             return new AuthorViewModel
             {
+                Id = author.Id,
                 Username = author.Login,
                 NumOfArticles = author.Articles.Count,
                 Raiting = author.Articles.Count ==0 ? 0 : Raiting(author)
