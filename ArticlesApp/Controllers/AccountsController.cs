@@ -53,7 +53,10 @@ namespace ArticlesApp.Controllers
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             result.IsAuthentificated = true;
-            result.Login = model.Login;
+            var user = unitOfWork.AuthorsRepository.
+                    Get(filter: p => p.Login == model.Login && p.Password == model.Password).FirstOrDefault();
+            result.UserId = user.Id;
+            result.Login = user.Login;
             result.Token = encodedJwt;
 
             return Ok(result); // сериализация?
