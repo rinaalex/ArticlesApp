@@ -16,4 +16,4 @@ jobs:
      - run:
          name: Run App
          command:
-           dotnet run --bin\Debug\netcoreapp2.2\ArticlesApp.exe
+           dotnet run --project .\bin\Debug\netcoreapp2.2\ArticlesApp.exe
