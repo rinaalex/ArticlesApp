@@ -23,7 +23,7 @@ namespace ArticlesApp.ViewModels.Articles.QueryObjects
                 Content = article.Content,
                 PublicationDate = article.PublicationDate,
                 AuthorName = article.Author.Login,
-                Raiting = article.Reviews.Count == 0 ? 0 : (float)article.Reviews.Sum(q => q.NumStars) / article.Reviews.Count()
+                Raiting = article.Reviews.Count == 0 ? 0 : (float)article.Reviews.Sum(q => q.NumStars) / article.Reviews.Count
             };
         }
     }
