@@ -30,7 +30,7 @@ namespace ArticlesApp.ViewModels.Articles.QueryObjects
         /// <summary>
         /// Содержит сопоставление ключей сортировки 
         /// </summary>
-        public static Dictionary<string, ArciclesOrderByOptions> OrderDictionary = new Dictionary<string, ArciclesOrderByOptions>();
+        public static readonly Dictionary<string, ArciclesOrderByOptions> OrderDictionary = new Dictionary<string, ArciclesOrderByOptions>();
 
         static ArticleListSort()
         {
