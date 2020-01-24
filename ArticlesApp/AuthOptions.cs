@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ArticlesApp
 {
-    public class AuthOptions
+    public static class AuthOptions
     {
         public const string ISSUER = "MyAuthServer"; 
         public const string AUDIENCE = "http://localhost:5001/";
