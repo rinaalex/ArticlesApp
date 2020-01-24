@@ -78,7 +78,7 @@ namespace ArticlesApp.Controllers
                     return CreatedAtAction(nameof(Get), new { id = article.Id }, article.MapToViewModel());
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError("error", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
             }
@@ -111,7 +111,7 @@ namespace ArticlesApp.Controllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ModelState.AddModelError("error", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
             }

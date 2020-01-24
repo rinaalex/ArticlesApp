@@ -75,7 +75,7 @@ namespace ArticlesApp.Controllers
                 }
                 ModelState.AddModelError("error", "Невозможно добавить отзыв. Статья не существует.");
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 ModelState.AddModelError("error", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
             }
@@ -107,7 +107,7 @@ namespace ArticlesApp.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 ModelState.AddModelError("error", "Не удалось сохранить изменения, попробуйте выполнить операцию позже.");
             }            
