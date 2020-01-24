@@ -10,7 +10,7 @@ namespace ArticlesApp.Repositories
     public class Repository <TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly DbContext context;
-        private readonly DbSet<TEntity> _entities;
+        private DbSet<TEntity> _entities;
 
         public Repository(DbContext context)
         {
